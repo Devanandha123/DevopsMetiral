@@ -1,0 +1,77 @@
+Install SonarQube on Ubuntu Community Edition
+Prerequisites
+A fresh Ubuntu 22.04 dedicated server
+A user with sudo privileges
+Java 11 or 17 installed 
+we have used cloud server with the configuration of 2vCPU, 4GB RAM, 80GB SSD. 
+It should have at least 2GB of RAM 1 CPU core and 30GB free space.
+
+Step 1: Update the System
+First, ensure your system is up-to-date:
+
+sudo apt update
+sudo apt upgrade -y
+Step 2: Install Java
+
+
+sudo apt install openjdk-17-jdk -y
+Verify the installation:
+
+java -version
+
+Step 3: Install SonarQube
+Download the latest SonarQube version:
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.5.1.90531.zip
+Extract the SonarQube package:
+
+unzip sonarqube-10.5.1.90531.zip
+sudo mv sonarqube-10.5.1.90531 /opt/sonarqube
+
+Create a SonarQube user:
+
+sudo adduser --system --no-create-home --group --disabled-login sonarqube
+
+Change ownership of the SonarQube directory:
+
+sudo chown -R sonarqube:sonarqube /opt/sonarqube
+
+Step 5: Create a Systemd Service File
+Create a new service file for SonarQube:
+
+sudo nano /etc/systemd/system/sonarqube.service
+Add the following content:
+
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonarqube
+Group=sonarqube
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+Reload the systemd daemon and start SonarQube:
+
+sudo systemctl daemon-reload
+sudo systemctl start sonarqube
+sudo systemctl enable sonarqube
+sudo systemctl status sonarqube
+Step 9: Access SonarQube
+Open your web browser and go to https://your_domain_or_ip. 
+You should see the SonarQube login page. The default credentials are:
+
+Username: admin
+Password: admin
+Upon first login, you will be prompted to change the default password.
+
+

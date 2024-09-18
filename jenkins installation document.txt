@@ -1,0 +1,47 @@
+https://www.linuxtechi.com/how-to-install-jenkins-on-ubuntu/
+
+INSTALLATION FOR JENKINS
+
+Prerequisites
+Pre-Install Ubuntu 22.04
+Non-root user with sudo privileges
+At least 2GB RAM or more
+25 GB disk space
+Internet Connectivity
+
+1) Install Java
+sudo apt update
+ sudo apt install fontconfig openjdk-17-jre -y
+ java --version
+ 
+ 
+ 
+ 2) Add Jenkins APT Repository
+ sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+
+3) Install Jenkins on Ubuntu 24.04
+
+sudo apt update
+ sudo apt install jenkins -y
+ systemctl status jenkinsTo view the password, use the cat command as shown:
+
+
+ sudo systemctl start jenkins
+ sudo ufw allow 8080
+ 
+  sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+  
+ In the next step, select ‘Install suggested plugin‘ for simplicity’s sake.
+ 
+ When the installation of plugins is complete, the installer will take you to the next section where you will be required to create an Admin user and click on the ‘Save and Continue’ button.
+ The next step will populate the default URL for your Jenkin’s instance. No action is required, simply click ‘Save and Finish’.
+ Finally, click on the ‘Start using Jenkins’ button to gain access to Jenkins dashboard.
+ 
+ 
+ 
+ 
