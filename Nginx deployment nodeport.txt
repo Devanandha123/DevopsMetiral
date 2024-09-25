@@ -1,0 +1,87 @@
+nginx deployment using nodeport service
+
+nginx-deploymentd-54b9c68f67-r2pwd
+
+192.168.49.2:30001
+
+kubectl exec -it nginx-deploymentd-54b9c68f67-r2pwd -n deva -- /bin/sh 
+
+Start here
+
+
+Deploying NGINX using a NodePort service in a Kubernetes cluster involves a few steps. Here's a simple guide to get you started:
+
+Step 1: Create a Deployment for NGINX
+Create a deployment YAML file (nginx-deployment.yaml) for NGINX:
+
+yaml
+Copy code
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+Step 2: Create a NodePort Service
+Create a service YAML file (nginx-service.yaml) to expose NGINX via NodePort:
+
+yaml
+Copy code
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: NodePort
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30001  # You can specify a port or let Kubernetes assign one
+Step 3: Deploy NGINX and the Service
+Run the following commands to deploy NGINX and create the service:
+
+bash
+Copy code
+kubectl apply -f nginx-deployment.yaml
+kubectl apply -f nginx-service.yaml
+Step 4: Access NGINX
+Find the IP address of one of your cluster nodes:
+
+bash
+Copy code
+kubectl get nodes -o wide
+Use the Node's IP address and the NodePort (e.g., 30001) to access NGINX in your browser:
+
+arduino
+Copy code
+http://<Node_IP>:30001
+Step 5: Verify Deployment
+Check the status of the deployment and service:
+
+bash
+Copy code
+kubectl get deployments
+kubectl get services
+Cleanup
+To clean up the resources, you can delete the deployment and service:
+
+bash
+Copy code
+kubectl delete -f nginx-deployment.yaml
+kubectl delete -f nginx-service.yaml
+This should get you up and running with NGINX exposed via a NodePort service! Let me know if you have any questions.

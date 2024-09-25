@@ -1,0 +1,117 @@
+print the workd count??
+
+ech "enter the the sting"
+read str;
+
+count=$( echo $str | greo -o "$serac_strg" | wc -l)
+
+letterr_count=$(echo "\tr -cd '[:alpha:]' | wc -c)
+
+Print the line by line  word
+
+echo "Hello 1567" | tr ' ' '\n'
+
+ setup the backup of logs
+
+#!/bin/bash
+LOG_DIR="/var/log"
+BACKUP_DIR="/Backup
+
+
+
+Docker file with front end and backend application
+nodeja, java
+
+
+FROM JDK:LATEST
+workdir /APP
+copy POM.XML
+
+run MVN CLEAN INSTALL
+copy SRC /APP/SRC
+run MVN PACKAGE
+expose 8080
+entrypoint ["JAVA", "-JAR" "APP.JAR]
+
+
+from NODE:18
+WORKDIR /APP
+COPY package*.json
+
+
+any program with groovy
+
+def greet(String name) {
+println "hello" ${name}"
+}
+
+greet('world)
+
+
+
+apiversiob: apps/v1
+Kind: Deployment
+
+manifest file types
+
+deployment.yaml
+servie.yaml
+ingress.yaml
+configmap.yaml
+secret.yaml
+
+write the script of ingrss files delpoyment
+
+
+apiVersion: v1
+Kind: service
+metadata
+name; webapp
+spec
+selector:
+app:webapp
+ports:
+- protocol: TCP
+port;80
+targetPort :80
+
+
+apiVersion: networking.k8s.io/v1
+kind: ingress
+metadata
+  name: ingress-webapp
+annotaions
+
+spec;
+  rules:
+- host: webapp-dev.com
+ http:
+  paths:
+  - path /api
+   pathType: prefix
+
+
+
+which service your working ??
+load balencer
+tell me the branching stratagy ??
+
+
+stages of jenkins??
+
+scm INSTLL DEPENDENCIES
+run Tests
+
+build 
+delpoy
+
+
+How to clone the git hub
+
+Git clone HTTP:Githuburl/
+
+how to add github credential??
+
+Git URL: ''GITHUB URL, Branch: 'MASTER' CREDENTIAL
+
+

@@ -1,0 +1,143 @@
+Ingress file
+
+
+
+
+To set up an NGINX Ingress Controller with a NodePort service in Kubernetes, you’ll need to follow these steps. This configuration will allow you to expose your services externally using an Ingress resource. Here’s a complete guide, including example YAML files.
+
+### Step 1: Set Up NGINX Ingress Controller
+
+First, install the NGINX Ingress Controller in your Kubernetes cluster.
+
+#### Install via Helm
+
+1. **Add the Ingress NGINX repository**:
+   ```bash
+   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+   ```
+
+2. **Install the Ingress Controller**:
+   ```bash
+   helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.service.type=NodePort
+   ```
+
+#### Verify Installation
+
+Check if the Ingress Controller is running:
+```bash
+kubectl get pods -n ingress-nginx
+```
+
+### Step 2: Deploy Your Application
+
+Let’s assume you have a simple application. Here’s an example deployment and service for a sample app (e.g., a Node.js application).
+
+#### Sample Deployment YAML (`app-deployment.yaml`)
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: yourusername/my-app:latest
+        ports:
+        - containerPort: 3000
+```
+
+#### Sample NodePort Service YAML (`app-service.yaml`)
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+spec:
+  type: NodePort
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001  # Specify a NodePort here
+  selector:
+    app: my-app
+```
+
+### Step 3: Create an Ingress Resource
+
+Now, create an Ingress resource to route traffic to your application.
+
+#### Ingress YAML (`app-ingress.yaml`)
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: myapp.local  # Change this to your domain or IP
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-app
+            port:
+              number: 3000
+```
+
+### Step 4: Apply the Configurations
+
+Apply the deployment, service, and ingress configurations:
+
+```bash
+kubectl apply -f app-deployment.yaml
+kubectl apply -f app-service.yaml
+kubectl apply -f app-ingress.yaml
+```
+
+### Step 5: Access Your Application
+
+1. **Get the Node IP**:
+   - If you are using a local cluster (like Minikube), get the IP using:
+     ```bash
+     minikube ip
+     ```
+   - For other environments, use the external IP of your Kubernetes nodes.
+
+2. **Access the Application**:
+   - Open your browser and go to:
+     ```
+     http://<node-ip>:30001
+     ```
+   - If you set a host (like `myapp.local`), ensure you add that to your `/etc/hosts` file, pointing to the Node IP:
+     ```
+     <node-ip> myapp.local
+
+
+http://192.168.49.2:30001
+
+192.168.49.2 myapp.local
+
+kubectl exec -it my-app-65b4958c46-th9bd -c my-app -n nandha -- /bin/sh
+
+
+     ```
+
+### Conclusion
+
+You now have a working setup with an NGINX Ingress Controller, a NodePort service, and an application exposed through an Ingress resource. If you need further assistance or specific configurations, feel free to ask!

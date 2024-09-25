@@ -33,6 +33,10 @@ sudo apt update
 
  sudo systemctl start jenkins
  sudo ufw allow 8080
+
+
+Deva
+5464Deva@
  
   sudo cat /var/lib/jenkins/secrets/initialAdminPassword
   

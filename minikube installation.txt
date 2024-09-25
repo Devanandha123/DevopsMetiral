@@ -1,0 +1,205 @@
+
+Kubernate installation
+
+Setting up **Minikube** on Ubuntu is a simple process. Minikube is a tool that helps you run a single-node Kubernetes cluster locally, making it easy to test Kubernetes applications. Follow the steps below to install and configure Minikube on Ubuntu.
+
+### Prerequisites
+1. **Ubuntu 20.04+** (These steps are based on Ubuntu 20.04, but they should work on newer versions as well.)
+2. **2 CPUs or more**.
+3. **2GB of free memory** or more.
+4. **20GB of free disk space**.
+5.    Docker Install
+
+Dockerhub
+devopsdeva012
+5464Deva@
+
+Setting up Docker on Ubuntu is a straightforward process. Follow these steps to install and configure Docker on Ubuntu:
+
+### Step 1: Update Your System
+Ensure that your system is up-to-date by running the following commands:
+
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+### Step 2: Uninstall Old Docker Versions (if any)
+If you have any older versions of Docker (`docker`, `docker-engine`, `docker.io`), uninstall them:
+
+```bash
+sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+
+### Step 3: Install Dependencies
+Install the required dependencies to allow apt to use a repository over HTTPS:
+
+```bash
+sudo apt-get install -y ca-certificates curl gnupg
+```
+
+### Step 4: Add Docker’s GPG Key
+Add Docker’s official GPG key, which is required for verifying Docker packages:
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
+
+### Step 5: Set Up the Docker Repository
+Add Docker’s official repository to the apt sources list:
+
+```bash
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+### Step 6: Install Docker
+Update the package index and install Docker:
+
+```bash
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+### Step 7: Start and Enable Docker
+Make sure Docker starts automatically on boot and is currently running:
+
+```bash
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+### Step 8: Verify the Docker Installation
+Check the Docker version to verify the installation:
+
+```bash
+docker --version
+```
+
+Run a test container to ensure Docker is working correctly:
+
+```bash
+sudo docker run hello-world
+
+
+
+
+```
+
+Kubernates minikube install
+
+.
+
+You can check if virtualization is enabled by running:
+
+```bash
+egrep -q 'vmx|svm' /proc/cpuinfo && echo "Virtualization is supported" || echo "Virtualization is not supported"
+```
+
+If your system doesn’t support virtualization, Minikube can still work with a **Docker** driver instead of a VM.
+
+### Step 1: Install Dependencies
+First, ensure that you have all necessary dependencies installed:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y curl wget apt-transport-https
+```
+
+
+```
+
+### Step 3: Install Minikube
+1. Download the Minikube binary:
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+```
+
+2. Install the Minikube binary by moving it to `/usr/local/bin/` and setting the proper permissions:
+
+```bash
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+3. Verify that Minikube is installed by checking the version:
+
+```bash
+minikube version
+```
+
+### Step 4: Install Kubectl (Kubernetes Command-Line Tool)
+You’ll need **kubectl** to interact with the Kubernetes cluster. To install it:
+
+1. Download the latest `kubectl` binary:
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+2. Install the `kubectl` binary:
+
+```bash
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+```
+
+3. Verify the `kubectl` installation:
+
+```bash
+kubectl version --client
+```
+
+### Step 5: Start Minikube
+Now, you can start Minikube with a driver of your choice. If you installed **VirtualBox**, run the following command to start the Minikube cluster:
+
+```bash
+minikube start --driver=virtualbox
+```
+
+If you’re using **Docker** as the driver, run:
+
+```bash
+minikube start --driver=docker
+```
+Once done this need to exit the root user 
+
+Exit 
+
+Then start the minikube start
+
+minikube start
+if you get any issues 
+
+sudo usermod -aG docker $USER && newgrp docker      then follow minikube start
+
+Minikube will download the necessary files and start a single-node Kubernetes cluster.
+
+### Step 6: Verify the Installation
+Once Minikube is started, verify that your Kubernetes cluster is running by checking the status:
+
+```bash
+minikube status
+```
+
+You can also verify that `kubectl` is configured to use the Minikube cluster:
+
+```bash
+kubectl get nodes
+```
+
+You should see the output showing a single Minikube node in the **Ready** state.
+
+### Step 7: Enable Minikube Dashboard (Optional)
+Minikube comes with a Kubernetes dashboard that can be helpful for managing your cluster.
+
+To access the dashboard, run:
+
+```bash
+minikube dashboard
+
+then dashbord will open default browser
+```
+

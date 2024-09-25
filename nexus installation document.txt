@@ -131,10 +131,12 @@ Copy http://16.170.140.95:8081
 change the password and save it
 
 
+Your admin user password is located in
+/opt/sonatype-work/nexus3/admin.password
 
 
-
-
+admin
+5464Deva@
 
 
 

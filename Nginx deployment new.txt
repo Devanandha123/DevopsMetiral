@@ -1,0 +1,100 @@
+To deploy Nginx on Kubernetes using a ClusterIP service (which makes the service accessible only within the cluster), follow the steps below:
+
+1. Create a Kubernetes Nginx Deployment
+First, create a deployment for Nginx, as shown in the nginx-deployment.yaml file:
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3  # Defines the number of Nginx pods
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21.6  # Use the preferred version of Nginx
+        ports:
+        - containerPort: 80
+
+2. Create a ClusterIP Service
+Next, create a ClusterIP service to expose the Nginx deployment internally within the cluster. This will ensure the service can only be accessed from within the cluster.
+
+Create a nginx-clusterip-service.yaml file:
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-clusterip-service
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP  # This is the default, no external access.
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: nginx
+
+3. Apply the YAML Files
+Run the following commands to apply both the Deployment and Service definitions:
+
+
+kubectl apply -f deployment.yaml -n dev
+kubectl apply -f service.yaml -n dev
+
+for delete
+
+kubectl delete -f deployment.yaml -n dev
+kubectl Delete -f service.yaml -n dev
+
+4. Check the Deployment and Service
+To confirm that the deployment and service were created, you can run:
+
+
+kubectl get deployments -n dev
+kubectl get services -n dev
+You should see something like this:
+
+NAME                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+nginx-clusterip-service ClusterIP   10.96.12.34      <none>        80/TCP    2m
+The EXTERNAL-IP will show <none>, which means this service is not accessible outside the cluster.
+
+5. Access Nginx Using ClusterIP
+Since this service is only accessible from within the cluster, you need to either:
+
+Exec into a pod within the cluster and use curl to test the service.
+Use port forwarding to access the service locally on your machine.
+
+Option 1: Exec into a Pod
+You can run the following command to access a pod and check the Nginx service:
+
+kubectl exec -it my-app-65b4958c46-th9bd -n nandha -- /bin/sh 
+
+
+Then, from inside the pod, use curl to access the Nginx service:
+
+
+curl http://nginx-clusterip-service
+
+Option 2: Use Port Forwarding
+
+You can use port forwarding to access the service on your local machine:
+
+
+kubectl port-forward service/nginx-clusterip-service 8080:80 -n deva
+
+Now, you can access Nginx on http://localhost:8080.
+
+
+That's it! Nginx should now be running inside your Kubernetes cluster and exposed only within the cluster using a ClusterIP service. Let me know if you need any further clarification or help!
